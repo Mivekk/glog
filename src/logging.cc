@@ -1464,9 +1464,25 @@ bool LogCleaner::IsLogFromCurrentProject(
       cleaned_base_filename += c;
     }
   }
+  
+  // Delete last dot to be able to use `find_last_of` function
+  cleaned_base_filename.pop_back();
+  int dot_pos = cleaned_base_filename.find_last_of('.');
+  cleaned_base_filename.erase(dot_pos + 1, std::string::npos);
+
+  bool found_file = false;
+  for (const auto& severity : LogSeverityNames) {
+    string cleaned_base_filename_with_severity = cleaned_base_filename + severity;
+
+    if (filepath.find(cleaned_base_filename_with_severity) == 0) {
+      cleaned_base_filename = cleaned_base_filename_with_severity + '.';
+      found_file = true;
+      break;
+    }
+  }
 
   // Return early if the filename doesn't start with `cleaned_base_filename`.
-  if (filepath.find(cleaned_base_filename) != 0) {
+  if (!found_file) {
     return false;
   }
 
