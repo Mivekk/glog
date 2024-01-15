@@ -1465,6 +1465,11 @@ bool LogCleaner::IsLogFromCurrentProject(
     }
   }
   
+  // cleaned_base_file contains .<severity>. at the end
+  // If we check it against filepath it will only allow files
+  // with that severity. As we want to delete old logs despite their severity,
+  // we need to replace <severity> in cleaned_base_file and find matching one. 
+
   // Erase severity name from cleaned_base_filename
   // Delete last dot to be able to use `find_last_of` function
   cleaned_base_filename.pop_back();
@@ -1472,7 +1477,7 @@ bool LogCleaner::IsLogFromCurrentProject(
   cleaned_base_filename.erase(dot_pos + 1, std::string::npos);
 
   // Loop through severity names and check whether
-  // filepath contains our new base name
+  // filepath contains cleaned_base_filename_with_severity
   bool found_file = false;
   for (const auto& severity : LogSeverityNames) {
     string cleaned_base_filename_with_severity = cleaned_base_filename + severity;
