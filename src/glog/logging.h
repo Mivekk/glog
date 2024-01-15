@@ -530,7 +530,6 @@ GLOG_EXPORT void InstallFailureFunction(logging_fail_func_t fail_func);
 EnableLogCleaner(unsigned int overdue_days);
 // Enable/Disable old log cleaner.
 GLOG_EXPORT void EnableLogCleaner(const std::chrono::minutes& overdue);
-GLOG_EXPORT void EnableLogCleaner(const std::chrono::minutes& overdue, LogSeverity severity);
 GLOG_EXPORT void DisableLogCleaner();
 GLOG_EXPORT void SetApplicationFingerprint(const std::string& fingerprint);
 
