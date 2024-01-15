@@ -1465,16 +1465,21 @@ bool LogCleaner::IsLogFromCurrentProject(
     }
   }
   
+  // Erase severity name from cleaned_base_filename
   // Delete last dot to be able to use `find_last_of` function
   cleaned_base_filename.pop_back();
   int dot_pos = cleaned_base_filename.find_last_of('.');
   cleaned_base_filename.erase(dot_pos + 1, std::string::npos);
 
+  // Loop through severity names and check whether
+  // filepath contains our new base name
   bool found_file = false;
   for (const auto& severity : LogSeverityNames) {
     string cleaned_base_filename_with_severity = cleaned_base_filename + severity;
 
     if (filepath.find(cleaned_base_filename_with_severity) == 0) {
+      // Assign cleaned_base_filename to our new base name 
+      // Add trailing dot we deleted earlier
       cleaned_base_filename = cleaned_base_filename_with_severity + '.';
       found_file = true;
       break;
